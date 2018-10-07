@@ -19,10 +19,16 @@ HungarianAlgorithm::~HungarianAlgorithm(){}
 //********************************************************//
 // A single function wrapper for solving assignment problem.
 //********************************************************//
-double HungarianAlgorithm::Solve(vector<vector<double>>& DistMatrix, vector<int>& Assignment)
+double HungarianAlgorithm::Solve(vector<vector<double> >& DistMatrix, vector<int>& Assignment)
 {
 	unsigned int nRows = DistMatrix.size();
+	if (nRows == 0) return 0.0;
 	unsigned int nCols = DistMatrix[0].size();
+	if (nCols == 0)
+	{
+	  for (int i=0; i<DistMatrix.size(); i++)
+	    Assignment.push_back(-1);
+	}
 
 	double *distMatrixIn = new double[nRows * nCols];
 	int *assignment = new int[nRows];

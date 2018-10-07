@@ -8,9 +8,14 @@
 // Both this code and the orignal code are published under the BSD license.
 // by Cong Ma, 2016
 // 
+#ifndef SORT_HUNGARIAN_ALGO
+#define SORT_HUNGARIAN_ALGO
 
 #include <iostream>
 #include <vector>
+#include <cstdlib>
+#include <cmath>
+#include <cfloat>
 
 using namespace std;
 
@@ -20,7 +25,7 @@ class HungarianAlgorithm
 public:
 	HungarianAlgorithm();
 	~HungarianAlgorithm();
-	double Solve(vector<vector<double>>& DistMatrix, vector<int>& Assignment);
+	double Solve(vector<vector<double> >& DistMatrix, vector<int>& Assignment);
 
 private:
 	void assignmentoptimal(int *assignment, double *cost, double *distMatrix, int nOfRows, int nOfColumns);
@@ -32,3 +37,5 @@ private:
 	void step4(int *assignment, double *distMatrix, bool *starMatrix, bool *newStarMatrix, bool *primeMatrix, bool *coveredColumns, bool *coveredRows, int nOfRows, int nOfColumns, int minDim, int row, int col);
 	void step5(int *assignment, double *distMatrix, bool *starMatrix, bool *newStarMatrix, bool *primeMatrix, bool *coveredColumns, bool *coveredRows, int nOfRows, int nOfColumns, int minDim);
 };
+
+#endif
