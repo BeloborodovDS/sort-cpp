@@ -36,7 +36,12 @@ using namespace std;
 // Computes IOU between two bounding boxes
 double GetIOU(Rect_<float> bb_test, Rect_<float> bb_gt);
 
-
+/* Bounding box of the SORT tracker
+ * frame: current frame number
+ * id: object/trajectory id 
+ * age: frames since this object was detected last time
+ * box: bounding box
+ */
 struct TrackingBox
 {
   int frame;
@@ -49,14 +54,18 @@ struct TrackingBox
 class SORTtracker{
   
 public:
+  //how many frames processed
+  int frame_count; 
   
-  int frame_count;
-  int max_age;
-  int min_hits;
+  //SORT parameters
+  int max_age; 
+  int min_hits; 
   double iouThreshold;
   
+  //Kalman filter trackers
   vector<KalmanTracker> trackers;
   
+  //internal
   vector<Rect_<float> > predictedBoxes;
   vector<vector<double> > iouMatrix;
   vector<int> assignment;
@@ -68,14 +77,27 @@ public:
   unsigned int trkNum;
   unsigned int detNum;
   
+  /* instantiate SORT tracker with parameters
+   * maxage: maximum allowed object "age" (frames since it was detected last time)
+   * minhits: minimum detection in a row to start tracking
+   * iou_thresh: IOU threshold to match detected and tracked objects (if lower, not matched)
+   */
   SORTtracker(int maxage=1, int minhits=3, float iou_thresh=0.3);
   
+  /* cleanup
+   */
   ~SORTtracker();
   
+  /* initialize tracker with fresh detections
+   * detections: bounding boxes of objects
+   */
   void init(vector<Rect_<float> > detections);
   
+  /* update tracker and get tracking results
+   * detections: new bounding boxes of objects
+   * results: tracked boxes with id and other properties
+   */
   void step(vector<Rect_<float> > detections, vector<TrackingBox> &result);
-  
   
 };
 

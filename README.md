@@ -1,3 +1,6 @@
+NOTE: this fork of C++ SORT provides convenient class interface and a bit augmented functionality. 
+
+Original README:
 
 ### Introduction
 
