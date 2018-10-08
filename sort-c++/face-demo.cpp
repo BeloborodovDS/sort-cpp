@@ -16,7 +16,8 @@ using namespace cv;
 
 int main()
 {
-  SORTtracker tracker(100, 3, 0.3);
+  int max_age = 10;
+  SORTtracker tracker(max_age, 3, 0.05);
   
   bool first_detections = true;
   
@@ -44,7 +45,7 @@ int main()
   
   vector<Rect> detections;
   vector<Rect_<float> > tmp_det;
-  vector< pair<int, Rect_<float> > > tracked_faces;
+  vector< TrackingBox > tracked_faces;
   
   for(;;)
   {
@@ -79,7 +80,11 @@ int main()
     
     for (int i=0; i<tracked_faces.size(); i++)
     {
-      rectangle(showframe, tracked_faces[i].second, randColor[tracked_faces[i].first % NUM_COLORS]);    
+      double alpha = ((float)max_age-tracked_faces[i].age)/max_age;
+      Scalar_<int> intcol = randColor[tracked_faces[i].id % NUM_COLORS];
+      Scalar col = Scalar(intcol[0],intcol[1],intcol[2]);
+      col = alpha*col + (1-alpha)*Scalar(0,0,0);
+      rectangle(showframe, tracked_faces[i].box, col, 3); 
     }
     
     imshow("tracking", showframe);

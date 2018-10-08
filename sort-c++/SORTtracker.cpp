@@ -76,7 +76,6 @@ void SORTtracker::init(vector<Rect_<float> > detections)
   allItems.clear();
   matchedItems.clear();
   matchedPairs.clear();
-  frameTrackingResult.clear();
   frame_count = 0;
   trkNum = 0;
   detNum = 0;
@@ -88,7 +87,7 @@ void SORTtracker::init(vector<Rect_<float> > detections)
   }
 }
 
-void SORTtracker::step(vector<Rect_<float> > detections, vector<pair<int, Rect_<float> > > &result)
+void SORTtracker::step(vector<Rect_<float> > detections, vector<TrackingBox> &result)
 {
   frame_count++;
   
@@ -197,20 +196,19 @@ void SORTtracker::step(vector<Rect_<float> > detections, vector<pair<int, Rect_<
   }
   
   // get trackers' output
-  frameTrackingResult.clear();
   for (vector<KalmanTracker>::iterator it = trackers.begin(); it != trackers.end();  )
   {
     //if (time since update < 1) and (hits >= min_hits or not enough frames passed)
     //push Kalman filter's state (box) to result
     
-    if (((*it).m_time_since_update < 1) &&
-      ((*it).m_hit_streak >= min_hits || frame_count <= min_hits))
+    if ((*it).m_is_tracking && ((*it).m_time_since_update <= max_age))
     {
       TrackingBox res;
       res.box = (*it).get_state();
       res.id = (*it).m_id + 1; 
       res.frame = frame_count;
-      frameTrackingResult.push_back(res);
+      res.age = (*it).m_time_since_update;
+      result.push_back(res);
     }
 
     // remove dead tracker (if time since update > max_age)
@@ -218,11 +216,6 @@ void SORTtracker::step(vector<Rect_<float> > detections, vector<pair<int, Rect_<
       it = trackers.erase(it);
     else
       it++; 
-  }
-  
-  for (int i=0; i<frameTrackingResult.size(); i++)
-  {
-    result.push_back(make_pair<int,Rect_<float> >(frameTrackingResult[i].id, frameTrackingResult[i].box));
   }
   
   return;

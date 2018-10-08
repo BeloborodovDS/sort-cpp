@@ -17,7 +17,7 @@ using namespace cv;
 class KalmanTracker
 {
 public:
-	KalmanTracker()
+	KalmanTracker(int hits_to_start = 3)
 	{
 		init_kf(StateType());
 		m_time_since_update = 0;
@@ -26,8 +26,12 @@ public:
 		m_age = 0;
 		m_id = kf_count;
 		//kf_count++;
+		
+		m_is_tracking = false;
+		m_hits_to_start = hits_to_start;
+		
 	}
-	KalmanTracker(StateType initRect)
+	KalmanTracker(StateType initRect, int hits_to_start = 3)
 	{
 		init_kf(initRect);
 		m_time_since_update = 0;
@@ -36,6 +40,9 @@ public:
 		m_age = 0;
 		m_id = kf_count;
 		kf_count++;
+		
+		m_is_tracking = false;
+		m_hits_to_start = hits_to_start;
 	}
 
 	~KalmanTracker()
@@ -56,6 +63,9 @@ public:
 	int m_hit_streak;
 	int m_age;
 	int m_id;
+	
+	int m_hits_to_start;
+	bool m_is_tracking;
 
 private:
 	void init_kf(StateType stateMat);

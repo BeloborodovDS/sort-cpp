@@ -63,6 +63,9 @@ void KalmanTracker::update(StateType stateMat)
 	m_history.clear();
 	m_hits += 1;
 	m_hit_streak += 1;
+	
+	if (m_hit_streak > m_hits_to_start)
+	  m_is_tracking = true;
 
 	// measurement
 	measurement.at<float>(0, 0) = stateMat.x + stateMat.width / 2;

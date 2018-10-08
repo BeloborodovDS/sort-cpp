@@ -41,6 +41,7 @@ struct TrackingBox
 {
   int frame;
   int id;
+  int age;
   Rect_<float> box;
 };
 
@@ -64,7 +65,6 @@ public:
   set<int> allItems;
   set<int> matchedItems;
   vector<cv::Point> matchedPairs;
-  vector<TrackingBox> frameTrackingResult;
   unsigned int trkNum;
   unsigned int detNum;
   
@@ -74,7 +74,7 @@ public:
   
   void init(vector<Rect_<float> > detections);
   
-  void step(vector<Rect_<float> > detections, vector<pair<int, Rect_<float> > > &result);
+  void step(vector<Rect_<float> > detections, vector<TrackingBox> &result);
   
   
 };
