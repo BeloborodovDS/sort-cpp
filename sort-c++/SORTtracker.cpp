@@ -82,7 +82,7 @@ void SORTtracker::init(vector<Rect_<float> > detections)
   //create a new Kalman filter tracker for each detection box
   for (unsigned int i = 0; i < detections.size(); i++)
   {
-    KalmanTracker trk = KalmanTracker(detections[i]);
+    KalmanTracker trk = KalmanTracker(detections[i], min_hits);
     trackers.push_back(trk);
   }
 }
@@ -191,7 +191,7 @@ void SORTtracker::step(vector<Rect_<float> > detections, vector<TrackingBox> &re
   // create and initialise new trackers for unmatched detections
   for (set<int>::iterator umd = unmatchedDetections.begin(); umd != unmatchedDetections.end(); umd++)
   {
-    KalmanTracker tracker = KalmanTracker(detections[*umd]);
+    KalmanTracker tracker = KalmanTracker(detections[*umd], min_hits);
     trackers.push_back(tracker);
   }
   

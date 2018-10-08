@@ -17,7 +17,8 @@ using namespace cv;
 int main()
 {
   int max_age = 10;
-  SORTtracker tracker(max_age, 3, 0.05);
+  int min_hits = 5;
+  SORTtracker tracker(max_age, min_hits, 0.05);
   
   bool first_detections = true;
   
