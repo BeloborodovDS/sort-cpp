@@ -18,7 +18,7 @@ int main()
 {
   //setup tracker
   int max_age = 10;
-  int min_hits = 5;
+  int min_hits = 10;
   SORTtracker tracker(max_age, min_hits, 0.05);
   
   //flag used to init tracker
@@ -90,6 +90,7 @@ int main()
       tracker.step(tmp_det, tracked_faces);
     }
     
+    
     //draw rectangles
     for (int i=0; i<tracked_faces.size(); i++)
     {
@@ -104,9 +105,9 @@ int main()
     
     //show frame
     imshow("tracking", showframe);
-    if(waitKey(1)!=-1)
+    if(cvWaitKey(1)!=-1)
     {
-      break;
+        break;
     }
   }
   
